@@ -52,23 +52,22 @@ const Dashboard = () => {
     const tareaMovida = tasks.find((task) => task.id.toString() === draggableId);
 
     // Establece el user_id según la columna de destino
-    const user_id = destination.droppableId === 'por_hacer' ? null : await obtenerUserIdDesdeAPI();
+    const user_id = await obtenerUserIdDesdeAPI();
 
-    // Verifica que el usuario tenga permiso para mover la tarea
-    if (destination.droppableId === 'en_progreso' && destination.droppableId === 'hecho' && tareaMovida.user_id !== user_id) {
-      toast.warning('No tienes permisos para mover esta tarea a esta columna!', {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-      return;
-    }
-
+     // Verifica que el usuario tenga permiso para mover la tarea
+   if (destination.droppableId === 'hecho' && tareaMovida.user_id !== user_id) {
+        toast.warning('No tienes permisos para mover esta tarea a esta columna!', {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+        });
+        return;
+      }
     // Si la tarea se movió a "Por Hacer" y estaba asignada, quita el user_id
     if (destination.droppableId === 'por_hacer' && tareaMovida.user_id !== null) {
       setTasks((prevTasks) => {
@@ -129,24 +128,34 @@ const Dashboard = () => {
           <h3 className="text-lg font-semibold mb-4">{titulo}</h3>
           {tasks
             .filter((task) => task.column === columnaId)
-            .map((task, index) => (
-              <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={index}>
-                {(provided) => (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                    className="p-2 mb-2 bg-gray-100 rounded-md"
-                  >
-                    <p className="text-sm font-semibold">{task.title}</p>
-                    <p className="text-xs text-gray-500">{task.description}</p>
-                    <p className="text-xs text-gray-500">
-                      {columnaId === 'por_hacer' ? 'Sin asignar' : `Asignado a: ${task.user ? task.user.name : 'N/A'}`}
-                    </p>
-                  </div>
-                )}
-              </Draggable>
-            ))}
+            .map((task, index) => {
+              // Verifica si el usuario tiene permisos para arrastrar la tarea en "En Progreso"
+              const canDrag = columnaId !== 'hecho';
+
+              return (
+                <Draggable
+                  key={task.id.toString()}
+                  draggableId={task.id.toString()}
+                  index={index}
+                  isDragDisabled={!canDrag} // Desactiva el arrastre si el usuario no tiene permisos
+                >
+                  {(provided) => (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className={`p-2 mb-2 bg-gray-100 rounded-md ${canDrag ? 'cursor-move' : 'cursor-not-allowed'}`}
+                    >
+                      <p className="text-sm font-semibold">{task.title}</p>
+                      <p className="text-xs text-gray-500">{task.description}</p>
+                      <p className="text-xs text-gray-500">
+                        {columnaId === 'por_hacer' ? 'Sin asignar' : `Asignado a: ${task.user ? task.user.name : 'N/A'}`}
+                      </p>
+                    </div>
+                  )}
+                </Draggable>
+              );
+            })}
           {provided.placeholder}
         </div>
       )}
