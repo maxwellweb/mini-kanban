@@ -37,7 +37,7 @@ const Dashboard = () => {
       checkAccessToken();
 
       // Establece un temporizador para verificar continuamente
-      const intervalId = setInterval(checkAccessToken, 50000);
+      const intervalId = setInterval(checkAccessToken, 5000);
 
       // Limpia el temporizador cuando el componente se desmonta
       return () => clearInterval(intervalId);
@@ -221,6 +221,16 @@ const Dashboard = () => {
     // Borra el localStorage y redirige a la página de inicio de sesión
     localStorage.removeItem('accessToken');
     history('/');
+    toast.success('Usuario desconectado, redireccionando al inicio de session.', {
+        position: 'bottom-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
   };
 
 
