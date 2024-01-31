@@ -21,27 +21,28 @@ const Registro = () => {
 
       if (response.status === 200) {
         history('/login');
-        toast.success('Usuario registrado con exito!', {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",});
-
+        toast.success('Usuario registrado con éxito!', {
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
       } else {
         // Manejar errores de registro aquí
         toast.error('Error al registrarse', {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",});
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
       }
     } catch (error) {
       // Manejar errores de red o del servidor
@@ -115,7 +116,10 @@ const Registro = () => {
           </div>
         </form>
         <div className="text-sm text-center">
-          ¿Ya tienes una cuenta? <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">Inicia sesión</Link>
+          ¿Ya tienes una cuenta?{' '}
+          <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Inicia sesión
+          </Link>
         </div>
         <ToastContainer />
       </div>

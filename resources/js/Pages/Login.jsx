@@ -1,11 +1,8 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,32 +11,30 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-        const response = await axios.post('/api/login', {
-          email,
-          password,
-        });
+      const response = await axios.post('/api/login', {
+        email,
+        password,
+      });
 
-        if(response.data.authorization.token) {
-          const accessToken = response.data.authorization.token;
-          localStorage.setItem('accessToken', accessToken);
-          //console.log('Inicio de sesión exitoso');
-          history('/dashboard');
-        }
-      } catch (error) {
-        if(error.response.status === 401){
-            toast.error(error.response.message, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                });
-        }
-        //console.error(error);
+      if (response.data.authorization.token) {
+        const accessToken = response.data.authorization.token;
+        localStorage.setItem('accessToken', accessToken);
+        history('/dashboard');
       }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error(error.response.message, {
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      }
+    }
   };
 
   return (
@@ -92,7 +87,10 @@ const Login = () => {
           </div>
         </form>
         <div className="text-sm text-center">
-          ¿No tienes una cuenta? <Link to="/sign-up" className="font-medium text-indigo-600 hover:text-indigo-500">Regístrate</Link>
+          ¿No tienes una cuenta?{' '}
+          <Link to="/sign-up" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Regístrate
+          </Link>
         </div>
         <ToastContainer />
       </div>
