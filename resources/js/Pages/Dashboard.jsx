@@ -245,7 +245,7 @@ const Dashboard = () => {
               <button
                 type="button"
                 onClick={handleAddTask}
-                className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+                className="mt-4 px-4 py-2 w-full bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
               >
                 Agregar Tarea
               </button>
